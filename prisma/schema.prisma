@@ -18,8 +18,43 @@ model kjv {
   hashed    String
 }
 
-model Books {
-  id String @id @default(uuid())
-  testament String
-  name String
+model testament {
+  id    Int    @id
+  name  String
+  books book[]
+}
+
+model book {
+  id           Int        @id @default(autoincrement())
+  name         String
+  abbreviation String?
+  testament    testament? @relation(fields: [testamentId], references: [id])
+  testamentId  Int?       @map("testament_id")
+  chapters     chapter[]
+}
+
+model chapter {
+  id         Int     @id @default(autoincrement())
+  chapterCnt Int     @map("chapter_cnt")
+  book       book?   @relation(fields: [bookId], references: [id])
+  bookId     Int?    @map("book_id")
+  verses     verse[]
+}
+
+model verse {
+  id         Int      @id @default(autoincrement())
+  chapterIdx Int      @map("chapter_idx")
+  verseCnt   Int      @map("verse_cnt")
+  chapter    chapter? @relation(fields: [chapterId], references: [id])
+  chapterId  Int?     @map("chapter_id")
+  scripts    script[]
+}
+
+model script {
+  id         Int    @id @default(autoincrement())
+  chapterIdx Int    @map("chapter_idx")
+  verseIdx   Int    @map("verse_idx")
+  script     String
+  verse      verse? @relation(fields: [verseId], references: [id])
+  verseId    Int?   @map("verse_id")
 }
