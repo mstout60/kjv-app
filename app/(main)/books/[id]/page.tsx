@@ -1,7 +1,8 @@
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import prisma from '@/lib/db'
 import Link from 'next/link'
 import React from 'react'
+
 
 const Book = async ({
   params
@@ -10,7 +11,7 @@ const Book = async ({
     params: { id: string }
   }) => {
   const search = Number(params.id)
-  console.log(search)
+
   const book = await prisma.book.findUnique({
     select: {
       name: true,
@@ -20,16 +21,16 @@ const Book = async ({
     where: {
       id: search
     },
+  });
 
-  })
+  const chapterId = book?.chapters[0].id.toString();
 
-  console.log(book)
+  console.log("Book", book)
 
   const chaptersBtn = [...Array(book?.chapters[0].chapterCnt)]
     .map((_, i) => {
       return i + 1;
     });
-
 
   return (
 
@@ -38,7 +39,7 @@ const Book = async ({
         {chaptersBtn.map((btn) => {
           return (
             <Link className={buttonVariants({ variant: "outline" })}
-              href={`/books/${book?.id}/chapters/${btn}`}
+              href={`/books/${book?.id}/chapters/${chapterId}?chapteridx=${btn}`}
               key={btn}
             >{btn}</Link >
           )

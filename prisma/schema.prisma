@@ -37,7 +37,7 @@ model chapter {
   id         Int     @id @default(autoincrement())
   chapterCnt Int     @map("chapter_cnt")
   book       book?   @relation(fields: [bookId], references: [id])
-  bookId     Int?    @map("book_id")
+  bookId     Int?    @unique @map("book_id")
   verses     verse[]
 }
 
