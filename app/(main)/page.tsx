@@ -8,6 +8,7 @@ export default async function Home() {
   const oldTestamentBooks = await getBooks({ testamentId: 1 });
   const newTestamentBooks = await getBooks({ testamentId: 2 });
 
+
   return (
     <div>
       <Tabs defaultValue={`${oldTestamentBooks[0].id}`} className="w-[400px]">
@@ -32,7 +33,6 @@ export default async function Home() {
           <>
             {newTestamentBooks[0].books.map((book) => {
               return (
-                // <Button className="" variant="outline">{book.abbreviation}</Button >
                 <Link className={buttonVariants({ variant: "outline" })}
                   key={book.id}
                   href={`/books/${book.id}`}

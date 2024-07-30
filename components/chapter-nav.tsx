@@ -19,7 +19,7 @@ const ChapterNav = async (
     return;
   }
 
-  const title = book.name + ' - Chapter ' + chapterIdx
+  const title = book.displayName + ' - Chapter ' + chapterIdx
 
   console.log("Book", book)
   return (

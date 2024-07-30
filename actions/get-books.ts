@@ -11,7 +11,11 @@ export const getBooks = async ({
         select: {
             name: true,
             id: true,
-            books: true,
+            books: {
+                orderBy: {
+                    id: "asc"
+                }
+            }
         },
         where: {
             id: testamentId,

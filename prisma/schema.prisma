@@ -27,6 +27,7 @@ model testament {
 model book {
   id           Int        @id @default(autoincrement())
   name         String
+  displayName  String?    @map("display_name")
   abbreviation String?
   testament    testament? @relation(fields: [testamentId], references: [id])
   testamentId  Int?       @map("testament_id")

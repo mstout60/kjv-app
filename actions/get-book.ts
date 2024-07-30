@@ -10,11 +10,12 @@ export const getBook = async ({
     const Book = await prisma.book.findUnique({
         select: {
             name: true,
-            //id: true,
+            displayName: true,
         },
         where: {
             id: bookId,
         }
+
     });
 
     return Book;

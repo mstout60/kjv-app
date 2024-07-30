@@ -31,10 +31,13 @@ const VersesPage = async ({
 
     return (
         <>
-            <ChapterNav
-                bookId={Number(params.id)}
-                chapterIdx={verses[0].chapterIdx}
-            />
+            <header>
+                <ChapterNav
+                    bookId={Number(params.id)}
+                    chapterIdx={verses[0].chapterIdx}
+                />
+            </header>
+
             <div className="w-full flex flex-col gap-2 p-3">
                 <>
                     {verses[0].scripts.map((verse) => {
@@ -57,6 +60,12 @@ const VersesPage = async ({
                 </>
 
             </div>
+            <footer>
+                <ChapterNav
+                    bookId={Number(params.id)}
+                    chapterIdx={verses[0].chapterIdx}
+                />
+            </footer>
         </>
 
     )

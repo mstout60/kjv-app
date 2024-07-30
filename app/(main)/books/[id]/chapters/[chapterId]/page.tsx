@@ -35,12 +35,6 @@ const Chapters = async ({
       return i + 1;
     });
 
-  // if (chapters?.verses[0]) {
-  //   redirect(`/books/${chapters.bookId}/chapters/${params.chapterId}`)
-  // }
-
-
-
   return (
     <div className="grid grid-cols-3 ml-4" >
       <>
