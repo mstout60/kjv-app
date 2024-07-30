@@ -1,3 +1,4 @@
+import ChapterNav from '@/components/chapter-nav'
 import { buttonVariants } from '@/components/ui/button'
 import prisma from '@/lib/db'
 import Link from 'next/link'
@@ -23,6 +24,10 @@ const Book = async ({
     },
   });
 
+  if (!book) {
+    return;
+  }
+
   const chapterId = book?.chapters[0].id.toString();
 
   console.log("Book", book)
@@ -33,6 +38,11 @@ const Book = async ({
     });
 
   return (
+    <>
+      
+      <ChapterNav 
+        bookId={book.id}
+      />
 
     <div className="grid grid-cols-3 ml-4" >
       <>
@@ -47,6 +57,7 @@ const Book = async ({
 
       </>
     </div>
+    </>
   )
 
 }

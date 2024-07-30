@@ -1,8 +1,6 @@
-import { Button, buttonVariants } from '@/components/ui/button';
 import prisma from '@/lib/db';
-import Link from 'next/link';
+
 import { redirect } from 'next/navigation';
-import React from 'react'
 
 const Chapters = async ({
   params,
@@ -27,29 +25,9 @@ const Chapters = async ({
     },
   });
 
-
   console.log("Chapters", chapters)
 
-  const versesBtn = [...Array(chapters?.verses[0].verseCnt)]
-    .map((_, i) => {
-      return i + 1;
-    });
-
-  return (
-    <div className="grid grid-cols-3 ml-4" >
-      <>
-        {versesBtn.map((btn) => {
-          return (
-            <Link className={buttonVariants({ variant: "outline" })}
-              href={`/books/${chapters?.bookId}/chapters/${chapters?.id}/verses/${chapters?.verses[0].id}`}
-              key={btn}
-            >{btn}</Link >
-          );
-        })}
-
-      </>
-    </div>
-  )
+  return redirect(`/books/${chapters?.bookId}/chapters/${chapters?.id}/verses/${chapters?.verses[0].id}`);
 }
 
 export default Chapters

@@ -1,31 +1,49 @@
+"use client";
+
 import { Button } from '@/components/ui/button'
 import Typography from '@/components/ui/typography'
 import { getBook } from '@/actions/get-book'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-const ChapterNav = async (
+const ChapterNav = (
   {
     bookId,
     chapterIdx
   }: {
     bookId: number;
-    chapterIdx: number;
+    chapterIdx?: number;
   }) => {
+  const router = useRouter();
+  const [title, setTitle] = useState('');
 
-  console.log(chapterIdx)
+  useEffect(() => {
+    const getCurrBook = async () => {
+      const Book
+        = await getBook({ bookId: bookId });
 
-  const book = await getBook({ bookId: bookId })
+      if (!Book) {
+        return;
+      }
 
-  if (!book) {
-    return;
-  }
+      setTitle(chapterIdx ? Book.displayName + ' - Chapter ' + chapterIdx : Book.displayName as string)
+    };
+    getCurrBook();
+  }, [bookId])
 
-  const title = book.displayName + ' - Chapter ' + chapterIdx
 
-  console.log("Book", book)
+  const previous = (currChapter: number) => {
+    console.log(currChapter)
+  };
+
+  const next = () => { };
+
+  //console.log("Book", book)
+
   return (
     <nav>
       <div className="flex items-center justify-between  cursor-pointer text-white mb-4 rounded-lg overflow-hidden p-4 bg-slate-300">
-        <Button variant="secondary" size="lg">
+        <Button variant="secondary" size="lg" onClick={() => {}}>
           <Typography
             text='Previous'
             variant='p'

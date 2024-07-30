@@ -14,8 +14,8 @@ export const getBooks = async ({
             books: {
                 orderBy: {
                     id: "asc"
-                }
-            }
+                },
+            },
         },
         where: {
             id: testamentId,
