@@ -2,9 +2,10 @@
 
 import { Button } from '@/components/ui/button'
 import Typography from '@/components/ui/typography'
-import { getBook } from '@/actions/get-book'
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getBook } from '@/lib/query';
 
 const ChapterNav = (
   {
@@ -20,7 +21,7 @@ const ChapterNav = (
   useEffect(() => {
     const getCurrBook = async () => {
       const Book
-        = await getBook({ bookId: bookId });
+        = await getBook(bookId);
 
       if (!Book) {
         return;
@@ -43,7 +44,7 @@ const ChapterNav = (
   return (
     <nav>
       <div className="flex items-center justify-between  cursor-pointer text-white mb-4 rounded-lg overflow-hidden p-4 bg-slate-300">
-        <Button variant="secondary" size="lg" onClick={() => {}}>
+        <Button variant="secondary" size="lg" onClick={() => { }}>
           <Typography
             text='Previous'
             variant='p'

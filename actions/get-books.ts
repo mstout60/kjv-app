@@ -22,5 +22,10 @@ export const getBooks = async ({
         }
     });
 
+    // if (!Books) {
+    //     console.error('No Books found');
+    //     return null;
+    // }
+
     return Books;
 };

@@ -8,7 +8,6 @@ const VersesPage = async ({
 }: {
     params: { id: string; chapterId: string; verseId: string }
 }) => {
-    console.log(params)
 
     const verses = await prisma.verse.findMany({
         select: {
@@ -28,6 +27,8 @@ const VersesPage = async ({
             id: Number(params.verseId)
         },
     });
+
+    console.log(verses)
 
     return (
         <>

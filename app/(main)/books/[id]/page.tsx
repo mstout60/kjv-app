@@ -1,6 +1,7 @@
 import ChapterNav from '@/components/chapter-nav'
 import { buttonVariants } from '@/components/ui/button'
-import prisma from '@/lib/db'
+
+import { getBookWithChapters } from '@/lib/query'
 import Link from 'next/link'
 import React from 'react'
 
@@ -13,50 +14,40 @@ const Book = async ({
   }) => {
   const search = Number(params.id)
 
-  const book = await prisma.book.findUnique({
-    select: {
-      name: true,
-      id: true,
-      chapters: true,
-    },
-    where: {
-      id: search
-    },
-  });
+  const response = await getBookWithChapters(search);
 
-  if (!book) {
+  if (!response) {
     return;
   }
 
-  const chapterId = book?.chapters[0].id.toString();
+  const chapterId = response[0].chapters[0].id.toString();
 
-  console.log("Book", book)
+  console.log("Book", response)
 
-  const chaptersBtn = [...Array(book?.chapters[0].chapterCnt)]
+  const chaptersBtn = [...Array(response[0]?.chapters[0].chapterCnt)]
     .map((_, i) => {
       return i + 1;
     });
 
   return (
     <>
-      
-      <ChapterNav 
-        bookId={book.id}
+      <ChapterNav
+        bookId={response[0].id}
       />
 
-    <div className="grid grid-cols-3 ml-4" >
-      <>
-        {chaptersBtn.map((btn) => {
-          return (
-            <Link className={buttonVariants({ variant: "outline" })}
-              href={`/books/${book?.id}/chapters/${chapterId}?chapteridx=${btn}`}
-              key={btn}
-            >{btn}</Link >
-          )
-        })}
+      <div className="grid grid-cols-3 ml-4" >
+        <>
+          {chaptersBtn.map((btn) => {
+            return (
+              <Link className={buttonVariants({ variant: "outline" })}
+                href={`/books/${response[0]?.id}/chapters/${chapterId}?chapteridx=${btn}`}
+                key={btn}
+              >{btn}</Link >
+            )
+          })}
 
-      </>
-    </div>
+        </>
+      </div>
     </>
   )
 

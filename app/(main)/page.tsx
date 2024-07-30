@@ -1,13 +1,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { getBooks } from "@/actions/get-books";
+import { getBooks } from "@/lib/query";
+
 
 export default async function Home() {
 
-  const oldTestamentBooks = await getBooks({ testamentId: 1 });
-  const newTestamentBooks = await getBooks({ testamentId: 2 });
-
+  const oldTestamentBooks = await getBooks(1);
+  const newTestamentBooks = await getBooks(2);
 
   return (
     <div>
@@ -27,8 +27,8 @@ export default async function Home() {
               )
             })}
           </>
-
         </TabsContent>
+
         <TabsContent className="grid grid-cols-3 ml-4" value={`${newTestamentBooks[0].id}`}>
           <>
             {newTestamentBooks[0].books.map((book) => {
@@ -43,5 +43,6 @@ export default async function Home() {
         </TabsContent>
       </Tabs>
     </div>
+
   );
 }
