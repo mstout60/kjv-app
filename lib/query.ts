@@ -32,3 +32,20 @@ export const getBookWithChapters = async (bookId: number) => {
 
     return response;
 }
+
+export const getChapterWithVerses = async (chapterId: number, chapterIdx: number) => {
+    const response = await prisma.chapter.findUnique({
+        where: {
+            id: chapterId
+        },
+        include: {
+            verses: {
+                where: {
+                    chapterIdx: chapterIdx
+                },
+            },
+        },
+    });
+
+    return response;
+}

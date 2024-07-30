@@ -28,11 +28,10 @@ const VersesPage = async ({
         },
     });
 
-    console.log(verses)
 
     return (
         <>
-            <header>
+            <header >
                 <ChapterNav
                     bookId={Number(params.id)}
                     chapterIdx={verses[0].chapterIdx}
@@ -43,7 +42,7 @@ const VersesPage = async ({
                 <>
                     {verses[0].scripts.map((verse) => {
                         return (
-                            <div className="flex items-start gap-4">
+                            <div className="flex items-start gap-4" >
                                 <Typography
                                     variant='h4'
                                     text={verse.verseIdx.toString()}
@@ -53,7 +52,8 @@ const VersesPage = async ({
                                 <Typography
                                     text={verse.script}
                                     variant='h6'
-                                    className='font-semibold'
+                                    className='font-semibold hover:text-blue-600'
+                                    key={verse.verseIdx}
                                 />
                             </div>
                         );

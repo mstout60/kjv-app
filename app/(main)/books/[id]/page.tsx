@@ -22,8 +22,6 @@ const Book = async ({
 
   const chapterId = response[0].chapters[0].id.toString();
 
-  console.log("Book", response)
-
   const chaptersBtn = [...Array(response[0]?.chapters[0].chapterCnt)]
     .map((_, i) => {
       return i + 1;

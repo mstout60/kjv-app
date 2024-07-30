@@ -39,7 +39,7 @@ const ChapterNav = (
 
   const next = () => { };
 
-  //console.log("Book", book)
+
 
   return (
     <nav>

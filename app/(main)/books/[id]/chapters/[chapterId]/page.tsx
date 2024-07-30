@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import { getChapterWithVerses } from '@/lib/query';
 
 import { redirect } from 'next/navigation';
 
@@ -10,24 +10,9 @@ const Chapters = async ({
   searchParams: { chapteridx: string }
 }) => {
 
-  const chapters = await prisma.chapter.findUnique({
-    select: {
-      id: true,
-      bookId: true,
-      verses: {
-        where: {
-          chapterIdx: Number(searchParams.chapteridx)
-        },
-      },
-    },
-    where: {
-      id: Number(params.chapterId)
-    },
-  });
+  const chapter = await getChapterWithVerses(Number(params.chapterId), Number(searchParams.chapteridx))
 
-  console.log("Chapters", chapters)
-
-  return redirect(`/books/${chapters?.bookId}/chapters/${chapters?.id}/verses/${chapters?.verses[0].id}`);
+  return redirect(`/books/${chapter?.bookId}/chapters/${chapter?.id}/verses/${chapter?.verses[0].id}`);
 }
 
 export default Chapters
