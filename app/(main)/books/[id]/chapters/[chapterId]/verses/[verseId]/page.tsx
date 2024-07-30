@@ -6,13 +6,14 @@ import React from 'react'
 const VersesPage = async ({
     params
 }: {
-    params: { id: string; chapterid: string; verseId: string }
+    params: { id: string; chapterId: string; verseId: string }
 }) => {
     console.log(params)
 
     const verses = await prisma.verse.findMany({
         select: {
             id: true,
+            chapterIdx: true,
             scripts: {
                 select: {
                     script: true,
@@ -28,28 +29,12 @@ const VersesPage = async ({
         },
     });
 
-    // const verses = await prisma.verse.findMany({
-    //     select: {
-    //         id: true,
-    //         scripts: {
-    //             select: {
-    //                 script: true,
-    //                 verseIdx: true,
-    //             },
-    //             orderBy: {
-    //                 verseIdx: 'asc'
-    //             }
-    //         },
-    //     },
-    //     where: {
-    //         id: Number(params.verseId)
-    //     },
-    // });
-
-
     return (
         <>
-            <ChapterNav />
+            <ChapterNav
+                bookId={Number(params.id)}
+                chapterIdx={verses[0].chapterIdx}
+            />
             <div className="w-full flex flex-col gap-2 p-3">
                 <>
                     {verses[0].scripts.map((verse) => {
