@@ -3,8 +3,6 @@ import { buttonVariants } from '@/components/ui/button'
 
 import { getBookWithChapters } from '@/lib/query'
 import Link from 'next/link'
-import React from 'react'
-
 
 const Book = async ({
   params
@@ -31,6 +29,7 @@ const Book = async ({
     <>
       <ChapterNav
         bookId={response[0].id}
+        chapterId={Number(chapterId)}
       />
 
       <div className="grid grid-cols-3 ml-4" >

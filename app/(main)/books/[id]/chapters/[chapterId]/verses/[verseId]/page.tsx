@@ -1,7 +1,6 @@
 import ChapterNav from '@/components/chapter-nav';
 import Typography from '@/components/ui/typography';
-import prisma from '@/lib/db';
-import React from 'react'
+import { getScriptByVerse } from '@/lib/query';
 
 const VersesPage = async ({
     params
@@ -9,67 +8,46 @@ const VersesPage = async ({
     params: { id: string; chapterId: string; verseId: string }
 }) => {
 
-    const verses = await prisma.verse.findMany({
-        select: {
-            id: true,
-            chapterIdx: true,
-            scripts: {
-                select: {
-                    script: true,
-                    verseIdx: true,
-                },
-                orderBy: {
-                    verseIdx: 'asc'
-                }
-            },
-        },
-        where: {
-            id: Number(params.verseId)
-        },
-    });
-
+    const verse = await getScriptByVerse(Number(params.verseId))
 
     return (
         <>
             <header >
                 <ChapterNav
                     bookId={Number(params.id)}
-                    chapterIdx={verses[0].chapterIdx}
+                    chapterId={Number(params.chapterId)}
+                    chapterIdx={verse[0].chapterIdx}
                 />
             </header>
-
             <div className="w-full flex flex-col gap-2 p-3">
                 <>
-                    {verses[0].scripts.map((verse) => {
+                    {verse[0].scripts.map((verse) => {
                         return (
-                            <div className="flex items-start gap-4" >
+                            <div className="flex items-start gap-4" key={verse.verseIdx} >
                                 <Typography
                                     variant='h4'
                                     text={verse.verseIdx.toString()}
                                     className='text-yellow-400'
-                                    key={verse.verseIdx}
                                 />
                                 <Typography
                                     text={verse.script}
                                     variant='h6'
                                     className='font-semibold hover:text-blue-600'
-                                    key={verse.verseIdx}
                                 />
                             </div>
                         );
                     })}
                 </>
-
             </div>
             <footer>
                 <ChapterNav
                     bookId={Number(params.id)}
-                    chapterIdx={verses[0].chapterIdx}
+                    chapterId={Number(params.chapterId)}
+                    chapterIdx={verse[0].chapterIdx}
                 />
             </footer>
         </>
-
     )
 }
 
-export default VersesPage
+export default VersesPage;

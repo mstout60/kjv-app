@@ -49,6 +49,9 @@ model verse {
   chapter    chapter? @relation(fields: [chapterId], references: [id])
   chapterId  Int?     @map("chapter_id")
   scripts    script[]
+
+  @@unique([chapterId, chapterIdx], name: "verse_chapter_idx")
+  @@index([chapterId, chapterIdx])
 }
 
 model script {
