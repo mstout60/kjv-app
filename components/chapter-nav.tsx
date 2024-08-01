@@ -15,16 +15,14 @@ const ChapterNav = (
     chapterIdx,
   }: {
     bookId: number;
-    chapterId?: number | undefined;
+    chapterId?: number;
     chapterIdx?: number;
   }) => {
   const router = useRouter();
   const [title, setTitle] = useState('');
-  const [currBookId, setCurrBookId] = useState(bookId);
-  const [currChapterId, setCurrChapterId] = useState(chapterId);
   const [chapterCnt, setChapterCnt] = useState(1);
   const [bookList, setBookList] = useState<AllBooks[]>([]);
-  const [isLoading, setIsLoading] = useState(true)
+  //const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const allBooks = async () => {
@@ -35,7 +33,7 @@ const ChapterNav = (
       }
 
       setBookList(Books);
-      setIsLoading(false);
+      //setIsLoading(false);
     };
 
     allBooks();
@@ -50,62 +48,60 @@ const ChapterNav = (
         return;
       }
 
-      setCurrBookId(Book.id)
-      setCurrChapterId(chapterId)
       setChapterCnt(Book.chapters[0].chapterCnt)
       setTitle(chapterIdx ? Book.displayName + ' - Chapter ' + chapterIdx : Book.displayName as string)
     };
     getCurrBook();
   }, [bookId])
 
-  const previous = async (currBookId: number, currChapter: number) => {
+  const previous = async (id: number, chapter: number, idx: number) => {
+    console.log("Previous", id, chapter, idx, chapterCnt)
 
-    if (bookList.some(book => currBookId - 1 === book.id)
-      && chapterIdx === undefined) {
-      setCurrBookId(currBookId - 1);
+    if (bookList.some(book => id - 1 === book.id)
+      && idx === undefined) {
 
-      return router.push(`/books/${currBookId}`)
+      return router.push(`/books/${id - 1}`)
     }
 
-    if (chapterIdx! - 1 >= chapterCnt) {
-      const idx = chapterIdx! - 1
+    if (idx - 1 != 0 && idx - 1 <= chapterCnt) {
+      const chapterIdx = idx - 1
+
+      console.log("Get Verse By Chapter and Index", chapter, chapterIdx)
 
       // Next query  verse for verseId by currChapter  and chapterIdx unique index
-      const verse = await getVerseByChapterAndIndex(currChapter, idx);
+      const verse = await getVerseByChapterAndIndex(chapter, chapterIdx);
 
-      return router.push(`/books/${currBookId}/chapters/${currChapter}/verses/${verse?.id}`)
+      return router.push(`/books/${id}/chapters/${chapter}/verses/${verse?.id}`)
     } else {
-      chapterIdx = undefined;
-      next(currBookId, 1);
+      previous(bookId, undefined!, undefined!);
     }
   };
 
-  const next = async (currBookId: number, currChapter: number) => {
+  const next = async (id: number, chapter: number, idx: number) => {
+    console.log("Next", id, chapter, idx)
 
-    if (bookList.some(book => currBookId + 1 === book.id)
-      && chapterIdx === undefined) {
-      setCurrBookId(currBookId + 1);
+    if (bookList.some(book => id + 1 === book.id)
+      && idx === undefined) {
 
-      return router.push(`/books/${currBookId}`)
+      return router.push(`/books/${id + 1}`)
     }
 
-    if (chapterIdx! + 1 <= chapterCnt) {
-      const idx = chapterIdx! + 1
+    if (idx + 1 <= chapterCnt) {
+      const chapterIdx = idx + 1
 
       // Next query  verse for verseId by currChapter  and chapterIdx unique index
-      const verse = await getVerseByChapterAndIndex(currChapter, idx);
+      const verse = await getVerseByChapterAndIndex(chapter, chapterIdx);
 
-      return router.push(`/books/${currBookId}/chapters/${currChapter}/verses/${verse?.id}`)
+      return router.push(`/books/${id}/chapters/${chapter}/verses/${verse?.id}`)
     } else {
-      chapterIdx = undefined;
-      next(currBookId, 1);
+      next(bookId, undefined!, undefined!);
     }
   };
 
   return (
     <nav>
       <div className="flex items-center justify-between  cursor-pointer text-white mb-4 rounded-lg overflow-hidden p-4 bg-slate-300">
-        <Button variant="secondary" size="lg" onClick={async () => { previous(currBookId, currChapterId!) }}>
+        <Button variant="secondary" size="lg" onClick={async () => { previous(bookId, chapterId!, chapterIdx!) }}>
           <Typography
             text='Previous'
             variant='p'
@@ -121,7 +117,7 @@ const ChapterNav = (
           />
         </div>
 
-        <Button variant="secondary" size="lg" onClick={async () => next(currBookId, currChapterId!)}>
+        <Button variant="secondary" size="lg" onClick={async () => next(bookId, chapterId!, chapterIdx!)}>
           <Typography
             text='Next'
             variant='p'
