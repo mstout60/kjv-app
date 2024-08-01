@@ -73,7 +73,9 @@ const ChapterNav = (
 
       return router.push(`/books/${id}/chapters/${chapter}/verses/${verse?.id}`)
     } else {
-      previous(bookId, undefined!, undefined!);
+      if (bookList.some(book => id - 1 === book.id)) {
+        previous(bookId, undefined!, undefined!);
+      }
     }
   };
 
@@ -94,7 +96,9 @@ const ChapterNav = (
 
       return router.push(`/books/${id}/chapters/${chapter}/verses/${verse?.id}`)
     } else {
-      next(bookId, undefined!, undefined!);
+      if (bookList.some(book => id + 1 === book.id)) {
+        next(bookId, undefined!, undefined!);
+      }
     }
   };
 
