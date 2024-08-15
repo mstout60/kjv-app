@@ -4,14 +4,16 @@ import Link from "next/link";
 import { getBooks } from "@/lib/query";
 
 
-export default async function Home() {
+export default function Home() {
 
-  const oldTestamentBooks = await getBooks(1);
-  const newTestamentBooks = await getBooks(2);
+  // const oldTestamentBooks = await getBooks(1);
+  // const newTestamentBooks = await getBooks(2);
 
   return (
+    
     <div>
-      <Tabs defaultValue={`${oldTestamentBooks[0].id}`} className="w-[400px]">
+      
+      {/* <Tabs defaultValue={`${oldTestamentBooks[0].id}`} className="w-[400px]">
         <TabsList>
           <TabsTrigger value={`${oldTestamentBooks[0].id}`}>Old</TabsTrigger>
           <TabsTrigger value={`${newTestamentBooks[0].id}`}>New</TabsTrigger>
@@ -41,8 +43,7 @@ export default async function Home() {
             })}
           </>
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
     </div>
-
   );
 }

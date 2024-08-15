@@ -1,14 +1,17 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { revalidatePath, unstable_noStore } from "next/cache";
 
 export const getBook = async (bookId: number) => {
+    unstable_noStore();
     const book = await prisma.book.findUnique({
         where: { id: bookId },
         include: {
             chapters: true,
         },
     });
+    //revalidatePath(`/books/${bookId}`, 'page');
     return book;
 };
 

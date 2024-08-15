@@ -1,7 +1,7 @@
 import ChapterNav from '@/components/chapter-nav'
 import { buttonVariants } from '@/components/ui/button'
 
-import { getBookWithChapters } from '@/lib/query'
+import { getAllBooks, getBookWithChapters } from '@/lib/query'
 import Link from 'next/link'
 
 const Book = async ({
@@ -11,12 +11,15 @@ const Book = async ({
     params: { id: string }
   }) => {
   const search = Number(params.id)
-
   const response = await getBookWithChapters(search);
 
   if (!response) {
     return;
   }
+
+  const Books = await getAllBooks();
+
+  console.log("AllBooks" , Books)
 
   const chapterId = response[0].chapters[0].id.toString();
 
@@ -30,6 +33,7 @@ const Book = async ({
       <ChapterNav
         bookId={response[0].id}
         chapterId={Number(chapterId)}
+        books={Books}
       />
 
       <div className="grid grid-cols-3 ml-4" >

@@ -5,7 +5,7 @@ import Typography from '@/components/ui/typography'
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAllBooks, getBook, getVerseByChapterAndIndex } from '@/lib/query';
+import {  getBook, getVerseByChapterAndIndex } from '@/lib/query';
 import { AllBooks } from '@/lib/types';
 
 const ChapterNav = (
@@ -13,51 +13,45 @@ const ChapterNav = (
     bookId,
     chapterId,
     chapterIdx,
+    books
   }: {
     bookId: number;
     chapterId?: number;
     chapterIdx?: number;
+    books: AllBooks[];
   }) => {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [chapterCnt, setChapterCnt] = useState(1);
-  const [bookList, setBookList] = useState<AllBooks[]>([]);
-  //const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const allBooks = async () => {
-      const Books = await getAllBooks();
-
-      if (!Books) {
-        return null;
-      }
-
-      setBookList(Books);
-      //setIsLoading(false);
-    };
-
-    allBooks();
-  }, []);
-
-  useEffect(() => {
+    let isCancelled = false;
     const getCurrBook = async () => {
+     
       const Book
         = await getBook(bookId);
 
       if (!Book) {
         return;
       }
-
-      setChapterCnt(Book.chapters[0].chapterCnt)
-      setTitle(chapterIdx ? Book.displayName + ' - Chapter ' + chapterIdx : Book.displayName as string)
+      if (!isCancelled) {
+        //console.log("Get Current Book")
+        setChapterCnt(Book.chapters[0].chapterCnt)
+        setTitle(chapterIdx ? Book.displayName + ' - Chapter ' + chapterIdx : Book.displayName as string)
+      }
     };
     getCurrBook();
-  }, [bookId])
+
+    return () => {
+      isCancelled = true;
+    }
+  }, [bookId, chapterIdx])
 
   const previous = async (id: number, chapter: number, idx: number) => {
     console.log("Previous", id, chapter, idx, chapterCnt)
 
-    if (bookList.some(book => id - 1 === book.id)
+    if (books.some(book => id - 1 === book.id)
       && idx === undefined) {
 
       return router.push(`/books/${id - 1}`)
@@ -66,14 +60,12 @@ const ChapterNav = (
     if (idx - 1 != 0 && idx - 1 <= chapterCnt) {
       const chapterIdx = idx - 1
 
-      console.log("Get Verse By Chapter and Index", chapter, chapterIdx)
-
       // Next query  verse for verseId by currChapter  and chapterIdx unique index
       const verse = await getVerseByChapterAndIndex(chapter, chapterIdx);
 
       return router.push(`/books/${id}/chapters/${chapter}/verses/${verse?.id}`)
     } else {
-      if (bookList.some(book => id - 1 === book.id)) {
+      if (books.some(book => id - 1 === book.id)) {
         previous(bookId, undefined!, undefined!);
       }
     }
@@ -82,7 +74,7 @@ const ChapterNav = (
   const next = async (id: number, chapter: number, idx: number) => {
     console.log("Next", id, chapter, idx)
 
-    if (bookList.some(book => id + 1 === book.id)
+    if (books.some(book => id + 1 === book.id)
       && idx === undefined) {
 
       return router.push(`/books/${id + 1}`)
@@ -96,7 +88,7 @@ const ChapterNav = (
 
       return router.push(`/books/${id}/chapters/${chapter}/verses/${verse?.id}`)
     } else {
-      if (bookList.some(book => id + 1 === book.id)) {
+      if (books.some(book => id + 1 === book.id)) {
         next(bookId, undefined!, undefined!);
       }
     }
