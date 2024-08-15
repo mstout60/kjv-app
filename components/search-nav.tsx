@@ -34,7 +34,7 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
         router.push(`/books/${selectedBookId}`)
         // router.replace(`/books/${selectedBookId}`)
         // router.refresh();
-    }, [selectedBookId]);
+    }, [selectedBookId, router]);
 
     const handleSelectedBook = (value: string) => {
         //revalidatePath(`/books/${value}`)
