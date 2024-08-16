@@ -5,7 +5,7 @@ import Typography from '@/components/ui/typography'
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {  getBook, getVerseByChapterAndIndex } from '@/lib/query';
+import { getBook, getVerseByChapterAndIndex } from '@/lib/query';
 import { AllBooks } from '@/lib/types';
 
 const ChapterNav = (
@@ -24,11 +24,13 @@ const ChapterNav = (
   const [title, setTitle] = useState('');
   const [chapterCnt, setChapterCnt] = useState(1);
   const [isLoading, setIsLoading] = useState(true)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     let isCancelled = false;
+
     const getCurrBook = async () => {
-     
+
       const Book
         = await getBook(bookId);
 
@@ -36,9 +38,13 @@ const ChapterNav = (
         return;
       }
       if (!isCancelled) {
-        //console.log("Get Current Book")
+        console.log("isMobile", isMobile)
         setChapterCnt(Book.chapters[0].chapterCnt)
-        setTitle(chapterIdx ? Book.displayName + ' - Chapter ' + chapterIdx : Book.displayName as string)
+        setTitle(chapterIdx ?
+          isMobile ? Book.abbreviation + ' Ch. ' + chapterIdx :
+            Book.displayName + ' - Chapter ' + chapterIdx
+          : isMobile ? Book.abbreviation as string : Book.displayName as string)
+
       }
     };
     getCurrBook();

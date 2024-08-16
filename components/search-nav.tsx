@@ -31,10 +31,13 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
     useEffect(() => {
 
         //router.prefetch(`/books/${selectedBookId}`, {kind: PrefetchKind.FULL} );
+        // router.refresh();
         router.push(`/books/${selectedBookId}`)
         // router.replace(`/books/${selectedBookId}`)
-        // router.refresh();
-    }, [selectedBookId, router]);
+        //const nextUrl = new Url()
+        //window.location.href = `/books/${selectedBookId}`
+
+    }, [selectedBookId]);
 
     const handleSelectedBook = (value: string) => {
         //revalidatePath(`/books/${value}`)
