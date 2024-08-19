@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBook, getVerseByChapterAndIndex } from '@/lib/query';
 import { AllBooks } from '@/lib/types';
+import useMediaQuery from '@/hooks/use-media-query';
 
 const ChapterNav = (
   {
@@ -24,13 +25,12 @@ const ChapterNav = (
   const [title, setTitle] = useState('');
   const [chapterCnt, setChapterCnt] = useState(1);
   const [isLoading, setIsLoading] = useState(true)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const isMobile = useMediaQuery('(min-width: 768px)');
 
   useEffect(() => {
     let isCancelled = false;
 
     const getCurrBook = async () => {
-
       const Book
         = await getBook(bookId);
 
@@ -38,12 +38,11 @@ const ChapterNav = (
         return;
       }
       if (!isCancelled) {
-        console.log("isMobile", isMobile)
         setChapterCnt(Book.chapters[0].chapterCnt)
         setTitle(chapterIdx ?
-          isMobile ? Book.abbreviation + ' Ch. ' + chapterIdx :
+          !isMobile ? Book.abbreviation + ' Ch. ' + chapterIdx :
             Book.displayName + ' - Chapter ' + chapterIdx
-          : isMobile ? Book.abbreviation as string : Book.displayName as string)
+          : !isMobile ? Book.abbreviation as string : Book.displayName as string)
 
       }
     };
@@ -52,7 +51,7 @@ const ChapterNav = (
     return () => {
       isCancelled = true;
     }
-  }, [bookId, chapterIdx])
+  }, [bookId, chapterIdx, isMobile])
 
   const previous = async (id: number, chapter: number, idx: number) => {
     console.log("Previous", id, chapter, idx, chapterCnt)
