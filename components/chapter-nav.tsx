@@ -111,11 +111,19 @@ const ChapterNav = (
         </Button>
 
         <div className='items-center'>
-          <Typography
-            text={title}
-            variant='h3'
+          <Button
+            size="sm"
+            variant="link"
             className='text-blue-700 '
-          />
+            onClick={() => router.push(`/books/${bookId}`)}
+          >
+            <Typography
+              text={title}
+              variant='h3'
+            //className='text-blue-700 '
+            />
+          </Button>
+
         </div>
 
         <Button variant="secondary" size="lg" onClick={async () => next(bookId, chapterId!, chapterIdx!)}>
