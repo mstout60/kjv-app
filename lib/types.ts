@@ -10,6 +10,7 @@ import {
     getChapterWithVerses,
     getScriptByVerse,
     getVerseByChapterAndIndex,
+    searchScript,
 } from '@/lib/query';
 
 export type Books = Prisma.PromiseReturnType<typeof getBooks>[0];
@@ -23,3 +24,5 @@ export type ChapterWithVerses = Prisma.PromiseReturnType<typeof getChapterWithVe
 export type VereseWithScripts = Prisma.PromiseReturnType<typeof getScriptByVerse>
 
 export type VerseByChapterAndIndex = Prisma.PromiseReturnType<typeof getVerseByChapterAndIndex>
+
+export type SearchScript = Prisma.PromiseReturnType<typeof searchScript>;

@@ -96,3 +96,39 @@ export const getScriptByVerse = async (verseId: number) => {
 
     return response;
 }
+
+export async function searchScript(query: string) {
+    const results = await prisma.script.findMany({
+        take: 10,
+        where: {
+            script: {
+                //search: encodeURIComponent(query),
+                search: query
+            },
+        },
+        select: {
+            chapterIdx: true,
+            verseIdx: true,
+            script: true,
+            id: true,
+            verse: {
+                select: {
+                    id:true,
+                    chapter: {
+                        select: {
+                            id: true,
+                            book: {
+                                select: {
+                                    id: true,
+                                    displayName: true,
+                                    abbreviation: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+    return results;
+}
