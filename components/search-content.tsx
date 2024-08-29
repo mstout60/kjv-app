@@ -23,9 +23,8 @@ export default function SearchContent({ results }: { results: SearchScript }) {
             {results.map((result) => (
                 <div className='mb-8 max-w-xl' key={result.id}>
                     <div className='group flex flex-col'>
-                        {/* <Link href={result.}>{result.formattedUrl}</Link> */}
                         <Link
-                            href={`/books/${result.verse?.chapter?.book?.id}/chapters/${result.verse?.chapter?.id}/verses/${result.verse?.id}`}
+                            href={`/books/${result.verse?.chapter?.book?.id}/chapters/${result.verse?.chapter?.id}/verses/${result.verse?.id}/scripts/${result.id}`}
                             className='group-hover:underline decoration-blue-800 text-xl truncate font-medium text-blue-800'
                         >
                             {result.verse?.chapter?.book?.displayName}{" "}{result.chapterIdx}{":"}{result.verseIdx}

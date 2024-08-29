@@ -1,6 +1,8 @@
 import {
     book,
-    Prisma
+    Prisma,
+    script,
+    verse
 } from '@prisma/client';
 
 import {
@@ -26,3 +28,15 @@ export type VereseWithScripts = Prisma.PromiseReturnType<typeof getScriptByVerse
 export type VerseByChapterAndIndex = Prisma.PromiseReturnType<typeof getVerseByChapterAndIndex>
 
 export type SearchScript = Prisma.PromiseReturnType<typeof searchScript>;
+
+export type ScriptResults = {
+    Scripts: Scripts[];
+}
+
+export type Scripts = {
+    id: number
+    chapterIdx: number
+    verseIdx: number
+    script: string
+    verseId: number | undefined
+}
