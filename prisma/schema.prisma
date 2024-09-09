@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
 }
 
@@ -62,4 +62,21 @@ model script {
   script     String
   verse      verse? @relation(fields: [verseId], references: [id])
   verseId    Int?   @map("verse_id")
+}
+
+model dictionary {
+  id            Int          @id @default(autoincrement())
+  word          String
+  pronunciation String
+  definitions   definition[]
+
+  @@unique([word])
+}
+
+model definition {
+  id           Int         @id @default(autoincrement())
+  type         String
+  text         String
+  dictionary   dictionary? @relation(fields: [dictionaryId], references: [id])
+  dictionaryId Int?        @map("dictionary_id")
 }
