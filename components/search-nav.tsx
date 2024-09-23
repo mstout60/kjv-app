@@ -26,6 +26,8 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
     const params = useParams();
     const router = useRouter();
     const [query, setQuery] = useState<string>('');
+    const limit = 10;
+    const [page, setPage] = useState(1);
     const [selectedBookId, setSelectedBookId] = useState(JSON.stringify(params) === '{}' ? oldTestament[0].books[0].id.toString() : params.id.toString())
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -37,7 +39,8 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
 
     const search = () => {
         startTransition(() => {
-            router.push(`/search?query=${encodeURIComponent(query)}`)
+            setPage(page + 1);
+            router.push(`/search?query=${encodeURIComponent(query)}&page=${page}&limit=${limit}`)
         });
     }
 
