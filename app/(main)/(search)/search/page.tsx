@@ -1,8 +1,6 @@
-import { ContentNotFound } from "@/components/content-not-found";
+import { redirect } from "next/navigation";
 import SearchContent from "@/components/search-content";
 import { searchScript, searchScriptCount } from "@/lib/query";
-import { redirect } from "next/navigation";
-import { Header } from "./header";
 
 interface SearchProps {
     searchParams: {
@@ -28,7 +26,9 @@ const SearchPage = async ({ searchParams }: SearchProps) => {
         <div className="flex flex-col h-full">
 
             <SearchContent
+                currentPage={page}
                 searchCount={searchCount}
+                totalPages={searchCount / limit}
                 results={results}
             />
         </div>

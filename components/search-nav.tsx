@@ -39,8 +39,8 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
 
     const search = () => {
         startTransition(() => {
-            setPage(page + 1);
             router.push(`/search?query=${encodeURIComponent(query)}&page=${page}&limit=${limit}`)
+            //setPage(page + 1);
         });
     }
 
