@@ -74,7 +74,7 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                     <Input
                         disabled={isSearching}
                         value={query}
-                        onChange={(e) => setQuery(e.target.value)}
+                        onChange={(e) => setQuery(e.target.value.replace(/\s+/g, "&"))}
                         placeholder="Search..."
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {

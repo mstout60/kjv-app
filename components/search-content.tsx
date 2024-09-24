@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {  useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { ContentNotFound } from "./content-not-found";
 import { SearchScript } from "@/lib/types";
@@ -52,7 +52,7 @@ export default function SearchContent({
                             {result.verse?.chapter?.book?.displayName}{" "}{result.chapterIdx}{":"}{result.verseIdx}
                         </Link>
                     </div>
-                    <p className='text-gray-600'>{getHighlightedText(result.script, highlight)}</p>
+                    <p className='text-gray-600'>{getHighlightedText(result.script, highlight.replace(/&/g, " "))}</p>
                 </div>
             ))}
             <div className="text-sm font-semibold text-muted-foreground">
