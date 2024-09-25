@@ -1,13 +1,14 @@
 "use client";
 
-import { Button } from '@/components/ui/button'
-import Typography from '@/components/ui/typography'
+import { Button } from '@/components/ui/button';
+import Typography from '@/components/ui/typography';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBook, getVerseByChapterAndIndex } from '@/lib/query';
 import { AllBooks } from '@/lib/types';
 import useMediaQuery from '@/hooks/use-media-query';
+
 
 const ChapterNav = (
   {
@@ -24,15 +25,14 @@ const ChapterNav = (
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [chapterCnt, setChapterCnt] = useState(1);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const isMobile = useMediaQuery('(min-width: 768px)');
 
   useEffect(() => {
     let isCancelled = false;
 
     const getCurrBook = async () => {
-      const Book
-        = await getBook(bookId);
+      const Book = await getBook(bookId);
 
       if (!Book) {
         return;
@@ -43,7 +43,6 @@ const ChapterNav = (
           !isMobile ? Book.abbreviation + ' Ch. ' + chapterIdx :
             Book.displayName + ' - Chapter ' + chapterIdx
           : !isMobile ? Book.abbreviation as string : Book.displayName as string)
-
       }
     };
     getCurrBook();
@@ -54,8 +53,6 @@ const ChapterNav = (
   }, [bookId, chapterIdx, isMobile])
 
   const previous = async (id: number, chapter: number, idx: number) => {
-    console.log("Previous", id, chapter, idx, chapterCnt)
-
     if (books.some(book => id - 1 === book.id)
       && idx === undefined) {
 
@@ -77,8 +74,6 @@ const ChapterNav = (
   };
 
   const next = async (id: number, chapter: number, idx: number) => {
-    console.log("Next", id, chapter, idx)
-
     if (books.some(book => id + 1 === book.id)
       && idx === undefined) {
 
@@ -135,7 +130,7 @@ const ChapterNav = (
         </Button>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default ChapterNav
+export default ChapterNav;
