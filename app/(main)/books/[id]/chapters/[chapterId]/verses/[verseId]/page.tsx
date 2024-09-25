@@ -1,7 +1,7 @@
 import ChapterNav from '@/components/chapter-nav';
-import Typography from '@/components/ui/typography';
-import { getAllBooks, getScriptByVerse } from '@/lib/query';
-import { AllBooks } from '@/lib/types';
+import ScriptBody from '@/components/script-body';
+import { useGetScriptByVerse } from '@/hooks/use-get-script-by-verse';
+import { getAllBooks } from '@/lib/query';
 
 const VersesPage = async ({
     params
@@ -9,7 +9,7 @@ const VersesPage = async ({
     params: { id: string; chapterId: string; verseId: string }
 }) => {
     const Books = await getAllBooks();
-    const verse = await getScriptByVerse(Number(params.verseId))
+    const verse = await useGetScriptByVerse({ verseId: Number(params.verseId) });
 
     return (
         <>
@@ -21,26 +21,10 @@ const VersesPage = async ({
                     books={Books}
                 />
             </header>
-            <div className="w-full flex flex-col gap-2 p-3">
-                <>
-                    {verse[0].scripts.map((verse) => {
-                        return (
-                            <div className="flex items-start gap-4" key={verse.verseIdx} >
-                                <Typography
-                                    variant='h4'
-                                    text={verse.verseIdx.toString()}
-                                    className='text-yellow-400'
-                                />
-                                <Typography
-                                    text={verse.script}
-                                    variant='h6'
-                                    className='font-semibold hover:text-blue-600'
-                                />
-                            </div>
-                        );
-                    })}
-                </>
-            </div>
+            <ScriptBody
+                verses={verse[0].scripts}
+                isFiltered={false}
+            />
             <footer>
                 <ChapterNav
                     bookId={Number(params.id)}

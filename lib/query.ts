@@ -98,18 +98,25 @@ export const getScriptByVerse = async (verseId: number) => {
 }
 
 export async function searchScriptCount(query: string) {
- const searchCount = await prisma.script.count({
-    where: {
-        script: {
-            search: query,
-        },
-    },
- });
+    const searchString = query?.split(" ")
+        .filter((search) => search.length > 0)
+        .join(" & ");
 
- return searchCount;
+    const searchCount = await prisma.script.count({
+        where: {
+            script: {
+                search: searchString,
+            },
+        },
+    });
+
+    return searchCount;
 };
 
 export async function searchScript(query: string, page: number, limit: number) {
+    const searchString = query?.split(" ")
+        .filter((search) => search.length > 0)
+        .join(" & ");
 
     const skip = (page - 1) * limit;
     const take = limit;
@@ -118,7 +125,7 @@ export async function searchScript(query: string, page: number, limit: number) {
         skip,
         where: {
             script: {
-                search: query
+                search: searchString
             },
         },
         select: {
