@@ -4,9 +4,9 @@ interface useGetScriptByVerseProps {
     verseId: number;
 };
 
-export const useGetScriptByVerse = ({ verseId }: useGetScriptByVerseProps) => {
-    const data = getScriptByVerse(verseId);
-    const isLoading = data === undefined;
+export const useGetScriptByVerse =  async ({ verseId }: useGetScriptByVerseProps) => {
+    const data =  await getScriptByVerse(verseId);
 
-    return data;
+
+    return data ;
 };

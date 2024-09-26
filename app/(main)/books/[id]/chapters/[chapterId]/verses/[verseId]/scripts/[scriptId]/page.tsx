@@ -33,9 +33,12 @@ const ScriptPage = async ({ params }: Props) => {
         <>
             <Header
                 bookId={Number(params.id)}
+                chapterId={response[0].chapterId!}
+                verseId={response[0].id}
                 chapter={filtered[0].chapterIdx}
                 verse={filtered[0].verseIdx}
                 script={filtered[0].script}
+
             />
             <Separator />
             <ScriptBody

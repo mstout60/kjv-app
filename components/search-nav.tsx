@@ -14,7 +14,7 @@ import { Books } from "@/lib/types"
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Loader2, Search } from "lucide-react";
 
 type Props = {
@@ -42,7 +42,7 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
             router.push(`/search?query=${encodeURIComponent(query)}&page=${page}&limit=${limit}`)
             //setPage(page + 1);
         });
-    }
+    };
 
     return (
         <>
@@ -70,7 +70,6 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                     </SelectContent>
                 </Select>
                 <div className="mr-6 relative h-10 z-10 rounded-md">
-                    {/* <Input  placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} /> */}
                     <Input
                         disabled={isSearching}
                         value={query}
@@ -97,9 +96,8 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                     </Button>
                 </div>
             </div>
-
         </>
-    )
-}
+    );
+};
 
 export default SearchNav;
