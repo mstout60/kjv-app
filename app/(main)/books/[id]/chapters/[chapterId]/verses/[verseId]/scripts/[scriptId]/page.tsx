@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import ScriptBody from '@/components/script-body';
 
 import { Header } from '@/app/(main)/(search)/search/header';
+import { searchDictionary } from '@/lib/query';
 
 type Props = {
     params: {
@@ -18,6 +19,7 @@ type Props = {
 
 const ScriptPage = async ({ params }: Props) => {
     const response = await useGetScriptByVerse({ verseId: Number(params.verseId) });
+    //const results = await searchDictionary("Apollyon");
 
     const scriptsByVerse: { id: number; chapterIdx: number; verseIdx: number; script: string; verseId: number | null; }[][] = []
     response.forEach((s) => {

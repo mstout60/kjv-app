@@ -1,9 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
-import Typography from "./ui/typography";
-import { getScriptByVerse } from "@/lib/query";
+import { searchDictionary } from "@/lib/query";
+import { Dictionary } from "@/lib/types";
+
+import Typography from "@/components/ui/typography";
+
+import { DictonaryCard } from "./dictionary-card";
 
 interface ScriptBodyProps {
     verses: {
@@ -22,23 +26,27 @@ const ScriptBody = ({
     isFiltered = false,
     filteredScript,
 }: ScriptBodyProps) => {
-    // const [scriptText, setScriptText] = useState("");
+    const [lookup, setLookup] = useState<Dictionary | null>(null);
+    const handleMouseUp = async () => {
+        const searchQuery = `${window.getSelection()!.toString().trim()}`;
+        if (searchQuery === null || searchQuery === "") return;
 
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         // You can await here
-    //         const response = await getScriptByVerse(filteredScriptId!);
-    //         setScriptText(response[0].scripts[0].script)
-    //     }
-    //     fetchData();
-    // }, [filteredScriptId]);
+        //console.log("Selected text:", searchQuery.toUpperCase());
+        const results = await searchDictionary(searchQuery);
+        setLookup(results);
+    }
 
     return (
         <div className="w-full flex flex-col gap-2 p-3">
             <>
+                {!!lookup && (
+                    <div>
+                        <DictonaryCard results={lookup} />
+                    </div>
+                )}
                 {verses.map((verse) => {
                     return (
-                        <div className="flex items-start gap-4" key={verse.verseIdx} >
+                        <div className="flex items-start gap-4" key={verse.verseIdx} onMouseUp={handleMouseUp} >
                             <Typography
                                 variant='h4'
                                 text={verse.verseIdx.toString()}

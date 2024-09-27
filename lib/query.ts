@@ -154,3 +154,25 @@ export async function searchScript(query: string, page: number, limit: number) {
     });
     return results;
 }
+
+export async function searchDictionary(query: string) {
+    const result = await prisma.dictionary.findFirst({
+        where: {
+            word: {
+                equals: query,
+                mode: 'insensitive',
+            }, 
+        },
+        select: {
+            word: true,
+            pronunciation: true,
+            definitions: {
+                select: {
+                    type: true,
+                    text: true,
+                },
+            },
+        },
+    });
+    return result;
+}
