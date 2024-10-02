@@ -31,7 +31,6 @@ const ScriptBody = ({
         const searchQuery = `${window.getSelection()!.toString().trim()}`;
         if (searchQuery === null || searchQuery === "") return;
 
-        //console.log("Selected text:", searchQuery.toUpperCase());
         const results = await searchDictionary(searchQuery);
         setLookup(results);
     }
@@ -68,3 +67,13 @@ const ScriptBody = ({
 };
 
 export default ScriptBody;
+
+// function SelectableText({
+//     children,
+// }: { children: React.ReactNode }) {
+//     if (process.platform === "linux") {
+//         return <TextInput multiline editable={false}>{children}</TextInput>
+//     } else {
+//         return <Text selectable>{children}</Text>
+//     }
+// }

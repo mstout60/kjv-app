@@ -37,12 +37,38 @@ export const getAllBooks = async () => {
     return books;
 }
 
+export const getBookByName = async (name: string) => {
+    const book = await prisma.book.findFirst({
+        where: {
+            displayName: {
+                contains: name,
+                mode: 'insensitive',
+            },
+        },
+        select: { id: true }
+    });
+    return book;
+}
+
 export const getBookWithChapters = async (bookId: number) => {
     const response = await prisma.book.findMany({
         where: {
             id: bookId
         },
         include: { chapters: true }
+    });
+
+    return response;
+}
+
+export const getChaptersByBookId = async (bookId: number) => {
+    const response = await prisma.chapter.findUnique({
+        where: {
+            bookId: bookId,
+        },
+        select: {
+            id: true,
+        },
     });
 
     return response;
@@ -161,7 +187,7 @@ export async function searchDictionary(query: string) {
             word: {
                 equals: query,
                 mode: 'insensitive',
-            }, 
+            },
         },
         select: {
             word: true,

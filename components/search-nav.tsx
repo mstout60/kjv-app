@@ -16,6 +16,8 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, Search } from "lucide-react";
+import { getBookByName, getChaptersByBookId, getVerseByChapterAndIndex } from "@/lib/query";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 type Props = {
     oldTestament: Books[];
@@ -38,6 +40,12 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
     }, [router, selectedBookId]);
 
     const search = () => {
+        var querySplit = query.split(":");
+
+        if (querySplit.length > 1) {
+            return getBookWithChapterAndVerse(querySplit, router);
+        }
+
         startTransition(() => {
             router.push(`/search?query=${encodeURIComponent(query)}&page=${page}&limit=${limit}`)
             //setPage(page + 1);
@@ -101,3 +109,23 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
 };
 
 export default SearchNav;
+
+const getBookWithChapterAndVerse = async (querySplit: any, router: AppRouterInstance) => {
+    var scriptIdx = Number(querySplit[1]) - 1;
+    var redirect = querySplit[0].split(" ");
+    var chapterIdx = 0;
+    var bookName;
+    if (redirect.length > 2) {
+        chapterIdx = Number(redirect[2]);
+        bookName = redirect[0] + " " + redirect[1];
+    } else {
+        bookName = redirect[0]
+        chapterIdx = Number(redirect[1])
+    }
+
+    const bookId = await getBookByName(bookName);
+    const chapterId = await getChaptersByBookId(bookId!.id);
+    const verseId = await getVerseByChapterAndIndex(chapterId!.id, chapterIdx)
+
+    return router.push(`/books/${bookId!.id}/chapters/${chapterId!.id}/verses/${verseId!.id}?scriptIdx=${scriptIdx}`);
+}

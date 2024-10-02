@@ -4,9 +4,11 @@ import { useGetScriptByVerse } from '@/hooks/use-get-script-by-verse';
 import { getAllBooks } from '@/lib/query';
 
 const VersesPage = async ({
-    params
+    params,
+    searchParams,
 }: {
-    params: { id: string; chapterId: string; verseId: string }
+    params: { id: string; chapterId: string; verseId: string };
+    searchParams?: { [key: string]: string | undefined };
 }) => {
     const Books = await getAllBooks();
     const verse = await useGetScriptByVerse({ verseId: Number(params.verseId) });
@@ -23,7 +25,8 @@ const VersesPage = async ({
             </header>
             <ScriptBody
                 verses={verse[0].scripts}
-                isFiltered={false}
+                isFiltered={!!searchParams?.scriptIdx}
+                filteredScript={!!searchParams?.scriptIdx ? verse[0].scripts[Number(searchParams?.scriptIdx)].script : undefined}
             />
             <footer>
                 <ChapterNav
