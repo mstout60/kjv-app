@@ -20,8 +20,8 @@ import { getBookByName, getChaptersByBookId, getVerseByChapterAndIndex } from "@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 import { UserButton } from "@clerk/nextjs";
-//import { auth } from "@clerk/nextjs/server";
 import { useAuth } from '@clerk/clerk-react'
+import Link from "next/link";
 
 type Props = {
     oldTestament: Books[];
@@ -61,28 +61,6 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
     return (
         <>
             <div className="ml-4 mt-4 mb-4  w-full h-10 flex items-center justify-between">
-                <Select
-                    value={JSON.stringify(params) === '{}' ? selectedBookId : params.id.toString()}
-                    onValueChange={value => setSelectedBookId(value)}
-                >
-                    <SelectTrigger className="w-[200px]">
-                        <SelectValue placeholder="Select a book" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectLabel>--- Old Testament ---</SelectLabel>
-                            {oldTestament[0].books.map((book) => (
-                                <SelectItem key={book.id} value={book.id.toString()}>{book.displayName}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                        <SelectGroup>
-                            <SelectLabel>--- New Testament ---</SelectLabel>
-                            {newTestament[0].books.map((book) => (
-                                <SelectItem key={book.id} value={book.id.toString()}>{book.displayName}</SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
                 <div className="mr-6 relative h-10 z-10 rounded-md">
                     <Input
                         disabled={isSearching}
@@ -108,12 +86,39 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                     >
                         {isSearching ? <Loader2 className="h-6 w-6 animate-spin" /> : <Search className="h-6 w-6" />}
                     </Button>
-
                 </div>
-                <div className="mr-6 relative h-10 z-10 rounded-md">
-                    <UserButton afterSignOutUrl="/" />
-                </div>
-
+                <Select
+                    value={JSON.stringify(params) === '{}' ? selectedBookId : params.id.toString()}
+                    onValueChange={value => setSelectedBookId(value)}
+                >
+                    <SelectTrigger className="w-[200px]">
+                        <SelectValue placeholder="Select a book" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>--- Old Testament ---</SelectLabel>
+                            {oldTestament[0].books.map((book) => (
+                                <SelectItem key={book.id} value={book.id.toString()}>{book.displayName}</SelectItem>
+                            ))}
+                        </SelectGroup>
+                        <SelectGroup>
+                            <SelectLabel>--- New Testament ---</SelectLabel>
+                            {newTestament[0].books.map((book) => (
+                                <SelectItem key={book.id} value={book.id.toString()}>{book.displayName}</SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+                {!userId && (
+                    <Link href="/sign-in" className="text-black hover:text-gray-700 mr-6 px-2">
+                        Sign-in
+                    </Link>
+                )}
+                {userId && (
+                    <div className="mr-6 relative h-10 z-10 rounded-md px-2">
+                        <UserButton />
+                    </div>
+                )}
             </div>
         </>
     );

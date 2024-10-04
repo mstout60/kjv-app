@@ -4,10 +4,6 @@ import "@/styles/globals.css";
 
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
 } from '@clerk/nextjs';
 
 import { cn } from "@/lib/utils";
@@ -29,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="mx-auto max-w-[1200px]">
+      <html lang="en" className="mx-auto min-w-[100px] max-w-[1200px]">
         <body className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
