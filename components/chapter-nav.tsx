@@ -96,7 +96,7 @@ const ChapterNav = (
 
   return (
     <nav>
-      <div className="flex items-center justify-between  cursor-pointer text-white mb-4 rounded-lg overflow-hidden p-4 bg-slate-300">
+      <div className="flex items-center justify-between  cursor-pointer text-white mb-4 mx-auto rounded-lg overflow-hidden p-4 bg-slate-300">
         <Button variant="secondary" size="lg" onClick={async () => { previous(bookId, chapterId!, chapterIdx!) }}>
           <Typography
             text='Previous'

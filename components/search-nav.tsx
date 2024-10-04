@@ -19,12 +19,18 @@ import { Loader2, Search } from "lucide-react";
 import { getBookByName, getChaptersByBookId, getVerseByChapterAndIndex } from "@/lib/query";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
+import { UserButton } from "@clerk/nextjs";
+//import { auth } from "@clerk/nextjs/server";
+import { useAuth } from '@clerk/clerk-react'
+
 type Props = {
     oldTestament: Books[];
     newTestament: Books[];
 }
 
 const SearchNav = ({ oldTestament, newTestament }: Props) => {
+    const { isSignedIn, sessionId, userId } = useAuth();
+
     const params = useParams();
     const router = useRouter();
     const [query, setQuery] = useState<string>('');
@@ -59,7 +65,7 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                     value={JSON.stringify(params) === '{}' ? selectedBookId : params.id.toString()}
                     onValueChange={value => setSelectedBookId(value)}
                 >
-                    <SelectTrigger className="w-[280px]">
+                    <SelectTrigger className="w-[200px]">
                         <SelectValue placeholder="Select a book" />
                     </SelectTrigger>
                     <SelectContent>
@@ -93,7 +99,7 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                             }
                         }}
                         ref={inputRef}
-                        className=" inset-0 w-[280px]" />
+                        className=" inset-0 w-[320px]" />
                     <Button
                         disabled={isSearching}
                         onClick={search}
@@ -102,7 +108,12 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                     >
                         {isSearching ? <Loader2 className="h-6 w-6 animate-spin" /> : <Search className="h-6 w-6" />}
                     </Button>
+
                 </div>
+                <div className="mr-6 relative h-10 z-10 rounded-md">
+                    <UserButton afterSignOutUrl="/" />
+                </div>
+
             </div>
         </>
     );

@@ -19,8 +19,6 @@ const Book = async ({
 
   const Books = await getAllBooks();
 
-  console.log("AllBooks" , Books)
-
   const chapterId = response[0].chapters[0].id.toString();
 
   const chaptersBtn = [...Array(response[0]?.chapters[0].chapterCnt)]
@@ -46,12 +44,10 @@ const Book = async ({
               >{btn}</Link >
             )
           })}
-
         </>
       </div>
     </>
-  )
-
-}
+  );
+};
 
 export default Book
