@@ -1,7 +1,9 @@
 import ChapterNav from '@/components/chapter-nav'
 import { buttonVariants } from '@/components/ui/button'
 
-import { getAllBooks, getBookWithChapters } from '@/lib/query'
+import { getAllBooks, getBookWithChapters, getComments, getUserAuthId } from '@/lib/query'
+import { ChaptersWithComment } from '@/lib/types';
+import { auth } from '@clerk/nextjs/server';
 import Link from 'next/link'
 
 const Book = async ({
@@ -10,6 +12,10 @@ const Book = async ({
   {
     params: { id: string }
   }) => {
+  const { userId } = auth();
+
+  console.log("User Id", userId)
+
   const search = Number(params.id)
   const response = await getBookWithChapters(search);
 
@@ -21,9 +27,24 @@ const Book = async ({
 
   const chapterId = response[0].chapters[0].id.toString();
 
+  let commentChapters = [] as ChaptersWithComment;
+  if (userId) {
+    const user = await getUserAuthId(userId);
+    commentChapters = await getComments(user?.id!);
+
+  }
+
+  console.log("comment list", commentChapters)
+
   const chaptersBtn = [...Array(response[0]?.chapters[0].chapterCnt)]
     .map((_, i) => {
-      return i + 1;
+      let j = "";
+      commentChapters.map((comment) => {
+        if (response[0].chapters[0].bookId === comment.bookId && response[0].chapters[0].id === comment.chapterId && comment.script.chapterIdx === i + 1) {
+          j = i + 1 + "*"
+        } else {j = Number(i + 1).toString()}
+      });
+      return j;
     });
 
   return (
@@ -37,11 +58,14 @@ const Book = async ({
       <div className="grid grid-cols-3 ml-4" >
         <>
           {chaptersBtn.map((btn) => {
+
             return (
               <Link className={buttonVariants({ variant: "outline" })}
                 href={`/books/${response[0]?.id}/chapters/${chapterId}?chapteridx=${btn}`}
                 key={btn}
-              >{btn}</Link >
+              >
+                {btn}
+              </Link >
             )
           })}
         </>

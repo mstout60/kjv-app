@@ -123,6 +123,15 @@ export const getScriptByVerse = async (verseId: number) => {
     return response;
 }
 
+export const getScriptById = async (scriptId: number) => {
+    const response = await prisma.script.findUnique({
+        where: {
+            id: scriptId,
+        },
+    });
+    return response;
+}
+
 export async function searchScriptCount(query: string) {
     const searchString = query?.split(" ")
         .filter((search) => search.length > 0)
@@ -201,4 +210,35 @@ export async function searchDictionary(query: string) {
         },
     });
     return result;
+}
+
+export async function getUserAuthId(id: string) {
+    const result = await prisma.user.findUnique({
+        where: {
+            id: id
+        },
+    });
+    return result;
+}
+
+export async function getComments(id: string) {
+    const results = await prisma.comment.findMany({
+        where: {
+            userId: id,
+        },
+        select: {
+            bookId: true,
+            chapterId: true,
+            scriptId: true,
+            script: {
+                select: {
+                    chapterIdx: true
+                },
+            },
+        },
+        orderBy: {
+            bookId: "desc"
+        },
+    });
+    return results;
 }

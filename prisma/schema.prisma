@@ -33,35 +33,39 @@ model book {
   testament    testament? @relation(fields: [testamentId], references: [id])
   testamentId  Int?       @map("testament_id")
   chapters     chapter[]
+  comment      comment[]
 }
 
 model chapter {
-  id         Int     @id @default(autoincrement())
-  chapterCnt Int     @map("chapter_cnt")
-  book       book?   @relation(fields: [bookId], references: [id])
-  bookId     Int?    @unique @map("book_id")
+  id         Int       @id @default(autoincrement())
+  chapterCnt Int       @map("chapter_cnt")
+  book       book?     @relation(fields: [bookId], references: [id])
+  bookId     Int?      @unique @map("book_id")
   verses     verse[]
+  comment    comment[]
 }
 
 model verse {
-  id         Int      @id @default(autoincrement())
-  chapterIdx Int      @map("chapter_idx")
-  verseCnt   Int      @map("verse_cnt")
-  chapter    chapter? @relation(fields: [chapterId], references: [id])
-  chapterId  Int?     @map("chapter_id")
+  id         Int       @id @default(autoincrement())
+  chapterIdx Int       @map("chapter_idx")
+  verseCnt   Int       @map("verse_cnt")
+  chapter    chapter?  @relation(fields: [chapterId], references: [id])
+  chapterId  Int?      @map("chapter_id")
   scripts    script[]
+  comment    comment[]
 
   @@unique([chapterId, chapterIdx], name: "verse_chapter_idx")
   @@index([chapterId, chapterIdx])
 }
 
 model script {
-  id         Int    @id @default(autoincrement())
-  chapterIdx Int    @map("chapter_idx")
-  verseIdx   Int    @map("verse_idx")
+  id         Int       @id @default(autoincrement())
+  chapterIdx Int       @map("chapter_idx")
+  verseIdx   Int       @map("verse_idx")
   script     String
-  verse      verse? @relation(fields: [verseId], references: [id])
-  verseId    Int?   @map("verse_id")
+  verse      verse?    @relation(fields: [verseId], references: [id])
+  verseId    Int?      @map("verse_id")
+  comment    comment[]
 }
 
 model dictionary {
@@ -82,11 +86,30 @@ model definition {
 }
 
 model user {
-  id         String   @id @default(uuid())
-  email      String   @unique
+  id         String    @id @default(uuid())
+  email      String    @unique
   name       String?
   avatar     String?
-  externalId String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  externalId String    @unique
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  comment    comment[]
+}
+
+model comment {
+  id        String  @id @default(uuid())
+  userId    String
+  user      user    @relation(fields: [userId], references: [id])
+  bookId    Int
+  book      book    @relation(fields: [bookId], references: [id])
+  chapterId Int
+  chapter   chapter @relation(fields: [chapterId], references: [id])
+  verseId   Int
+  verse     verse   @relation(fields: [verseId], references: [id])
+  scriptId  Int
+  script    script  @relation(fields: [scriptId], references: [id])
+  comment   String
+
+  @@index([userId])
+  @@index([bookId, chapterId, verseId, scriptId])
 }

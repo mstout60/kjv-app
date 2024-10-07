@@ -10,7 +10,10 @@ import {
     getBooks,
     getBookWithChapters,
     getChapterWithVerses,
+    getComments,
+    getScriptById,
     getScriptByVerse,
+    getUserAuthId,
     getVerseByChapterAndIndex,
     searchDictionary,
     searchScript,
@@ -31,6 +34,12 @@ export type VerseByChapterAndIndex = Prisma.PromiseReturnType<typeof getVerseByC
 export type SearchScript = Prisma.PromiseReturnType<typeof searchScript>;
 
 export type Dictionary = Prisma.PromiseReturnType<typeof searchDictionary>;
+
+export type UserByAuthId = Prisma.PromiseReturnType<typeof getUserAuthId>
+
+export type ChaptersWithComment = Prisma.PromiseReturnType<typeof getComments>
+
+export type ScriptByScriptId = Prisma.PromiseReturnType<typeof getScriptById>
 
 export type ScriptResults = {
     Scripts: Scripts[];
