@@ -1,7 +1,7 @@
 import ChapterNav from '@/components/chapter-nav'
 import { buttonVariants } from '@/components/ui/button'
 
-import { getAllBooks, getBookWithChapters, getComments, getUserAuthId } from '@/lib/query'
+import { getAllBooks, getBookWithChapters, getComments, getFirstBookId, getUserAuthId } from '@/lib/query'
 import { ChaptersWithComment } from '@/lib/types';
 import { auth } from '@clerk/nextjs/server';
 import Link from 'next/link'
@@ -15,6 +15,17 @@ const Book = async ({
   const { userId } = auth();
 
   console.log("User Id", userId)
+  // console.log("Params Id: ", params.id)
+
+  // let search = 0;
+  // if (JSON.stringify(params) === '{}') {
+  //   const result = await getFirstBookId();
+  //   search = result?.id!;
+  // } else {
+  //   search = Number(params.id)
+  // }
+
+  // console.log("Book Page ", search)
 
   const search = Number(params.id)
   const response = await getBookWithChapters(search);
@@ -31,19 +42,22 @@ const Book = async ({
   if (userId) {
     const user = await getUserAuthId(userId);
     commentChapters = await getComments(user?.id!);
-
   }
 
-  console.log("comment list", commentChapters)
+  //console.log("comment list", commentChapters)
 
   const chaptersBtn = [...Array(response[0]?.chapters[0].chapterCnt)]
     .map((_, i) => {
       let j = "";
-      commentChapters.map((comment) => {
-        if (response[0].chapters[0].bookId === comment.bookId && response[0].chapters[0].id === comment.chapterId && comment.script.chapterIdx === i + 1) {
-          j = i + 1 + "*"
-        } else {j = Number(i + 1).toString()}
-      });
+      if (commentChapters.length > 0) {
+        commentChapters.map((comment) => {
+          if (response[0].chapters[0].bookId === comment.bookId && response[0].chapters[0].id === comment.chapterId && comment.script.chapterIdx === i + 1) {
+            j = i + 1 + "*"
+          } else { j = Number(i + 1).toString() }
+        });
+      } else {
+        j = Number(i + 1).toString()
+      }
       return j;
     });
 

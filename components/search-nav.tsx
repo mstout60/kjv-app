@@ -19,9 +19,7 @@ import { Loader2, Search } from "lucide-react";
 import { getBookByName, getChaptersByBookId, getVerseByChapterAndIndex } from "@/lib/query";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-import { UserButton } from "@clerk/nextjs";
-import { useAuth } from '@clerk/clerk-react'
-import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 type Props = {
     oldTestament: Books[];
@@ -29,7 +27,6 @@ type Props = {
 }
 
 const SearchNav = ({ oldTestament, newTestament }: Props) => {
-    const { isSignedIn, sessionId, userId } = useAuth();
 
     const params = useParams();
     const router = useRouter();
@@ -38,6 +35,7 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
     const [page, setPage] = useState(1);
     const [selectedBookId, setSelectedBookId] = useState(JSON.stringify(params) === '{}' ? oldTestament[0].books[0].id.toString() : params.id.toString())
 
+    console.log("Selected Book Id", selectedBookId)
     const inputRef = useRef<HTMLInputElement>(null);
     const [isSearching, startTransition] = useTransition();
 
@@ -54,13 +52,12 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
 
         startTransition(() => {
             router.push(`/search?query=${encodeURIComponent(query)}&page=${page}&limit=${limit}`)
-            //setPage(page + 1);
         });
     };
 
     return (
         <>
-            <div className="ml-4 mt-4 mb-4  w-full h-10 flex items-center justify-between">
+            <nav className="mx-auto py-2 px-4 flex justify-between items-center ">
                 <div className="mr-6 relative h-10 z-10 rounded-md">
                     <Input
                         disabled={isSearching}
@@ -109,17 +106,15 @@ const SearchNav = ({ oldTestament, newTestament }: Props) => {
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                {!userId && (
-                    <Link href="/sign-in" className="text-black hover:text-gray-700 mr-6 px-2">
-                        Sign-in
-                    </Link>
-                )}
-                {userId && (
-                    <div className="mr-6 relative h-10 z-10 rounded-md px-2">
-                        <UserButton />
-                    </div>
-                )}
-            </div>
+                <SignedOut>
+                    <SignInButton forceRedirectUrl="/">
+                        <Button variant="outline">Login</Button>
+                    </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
+            </nav>
         </>
     );
 };

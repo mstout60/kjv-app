@@ -12,8 +12,19 @@ export const getBook = async (bookId: number) => {
         },
     });
     //revalidatePath(`/books/${bookId}`, 'page');
+
     return book;
 };
+
+export const getFirstBookId = async () => {
+    const result = await prisma.book.findFirst({
+        select: { id: true},
+        orderBy: {
+            id: "desc",
+        },
+    });
+    return result;
+}
 
 export const getBooks = async (testamentId: number) => {
     const books = await prisma.testament.findMany({
